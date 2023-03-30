@@ -28,30 +28,24 @@ import static org.mockito.Mockito.when;
 @AutoConfigureMockMvc
 @ExtendWith(MockitoExtension.class)
 public class UsuarioServiceTest {
-//    @Mock
-//    UsuarioRepository repository;
-//    @Autowired
-//    UsuarioServiceImp service;
-//
-////    @InjectMocks
-////    UsuarioServiceImp serviceImp;
-//
-//
-//    @Test
-//    @DisplayName("Deve salvar cadastro com sucesso")
-//    void salvarComSucesso() {
-//
-//        UsuarioDto usuarioDto = MockFactory.usuarioDtoMock();
-//
-//        UsuarioResponse request = MockFactory.usuarioResponseMock();
-//
-//        service.saveUser(usuarioDto);
-//
-//
-//        assertNotNull(request);
-//
-//    }
-//
+    @Mock
+    UsuarioRepository repository;
+    @Autowired
+    UsuarioServiceImp service;
+
+//    @InjectMocks
+//    UsuarioServiceImp serviceImp;
+
+
+    @Test
+    @DisplayName("Deve salvar cadastro com sucesso")
+    void salvarComSucesso() {
+        UsuarioDto usuarioDto = MockFactory.usuarioDtoMock();
+        UsuarioResponse request = MockFactory.usuarioResponseMock();
+        service.saveUser(usuarioDto);
+        assertNotNull(request);
+    }
+
 //    @DisplayName("Listar Usuario Admin")
 //    @Test
 //    public void listaUsuario() {
@@ -78,26 +72,26 @@ public class UsuarioServiceTest {
 //
 //
 //    }
-//
-//    @DisplayName("Deletar Usuario")
-//    @Test
-//    public void deletarUser() {
-//        // given
-//
-//
-//        Usuario user = new Usuario();
-//
-//
-////        String mensagem = "DELETOU";
-//
-//        List<Usuario> list;
-//
-//
-//        Mockito.when(repository.findById(user.getId())).thenReturn(Optional.of(user));
-//        Mockito.doNothing().when(repository).deleteById(Mockito.any());
-//        service.deletarCpf(user.getId(), user.getEmail(), user.getSenha());
-//        verify(repository, Mockito.times(1)).deleteById(user.getId());
-//    }
+
+    @DisplayName("Deletar Usuario")
+    @Test
+    public void deletarUser() {
+        // given
+
+
+        Usuario user = new Usuario();
+
+
+//        String mensagem = "DELETOU";
+
+        List<Usuario> list;
+
+
+        Mockito.when(repository.findById(user.getId())).thenReturn(Optional.of(user));
+        Mockito.doNothing().when(repository).deleteById(Mockito.any());
+        service.deletarCpf(user.getId(), user.getEmail(), user.getSenha());
+        verify(repository, Mockito.times(1)).deleteById(user.getId());
+    }
 
 
 //    @Test

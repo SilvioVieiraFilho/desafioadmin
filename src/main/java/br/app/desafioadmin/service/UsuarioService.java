@@ -14,8 +14,10 @@ public interface UsuarioService {
     public List<Usuario> listaCadastro(String email, String senha);
 
     public void deletarCpf(String cpf,String email,String senha);
+
+    public UsuarioResponse alterarUsuario(String id, Usuario request, String email, String senha);
 }
 
-//    public String alterarUsuario(String id, Usuario request, String email, String senha);
-//
-//}
+
+
+

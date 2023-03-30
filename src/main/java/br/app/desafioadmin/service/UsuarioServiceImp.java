@@ -54,60 +54,44 @@ public class UsuarioServiceImp implements UsuarioService {
 
         Optional<Usuario> retornoListaAdm = repository.logarUsuario(email, senha);
 
-        if (retornoListaAdm.get().getTipo() == TipoUsuario.ADMIN) {
-
-            response.setLista1(lista);
-
-            return response.getLista1();
-
-        }
-
+        if (logarUsuario(response, lista, retornoListaAdm)) return response.getLista1();
         return response.getLista1();
     }
-
-
     public void deletarCpf(String cpf, String email, String senha) {
 
         Optional<Usuario> lista = repository.logarUsuario(email, senha);
 
-        if (lista.get().getTipo() == TipoUsuario.ADMIN){
+        loginUsuarioDel(cpf, lista);
+    }
+
+    private void loginUsuarioDel(String cpf, Optional<Usuario> lista) {
+        if (lista.get().getTipo() == TipoUsuario.ADMIN) {
             repository.deleteCpf(cpf);
-        } else{
+        } else {
             throw new UsuarioBusinessExcepetion();
         }
     }
 
+    public UsuarioResponse alterarUsuario(String id, Usuario usuarioDto, String email, String senha) {
+        Optional<Usuario> lista = repository.logarUsuario(email, senha);
+        Usuario usuarioEntity = MapperUsuario.toUsuarioupdate(usuarioDto, id);
+        UsuarioResponse response = MapperUsuario.toUsuarioResponse(usuarioEntity);
+        repository.save(usuarioEntity);
+        if (lista.get().getTipo() == TipoUsuario.ADMIN) {
+            repository.save(usuarioEntity);
+            return response;
+        }
+        return null;
+    }
 
-//    public String alterarUsuario(String id, Usuario request, String email, String senha) {
-//
-////        Optional<Usuario> lista = repository.logarUsuario(email, senha);
-//
-//        String message;
-//
-//        Usuario usuario = new Usuario();
-//
-//        if (lista.get().getTipo() == TipoUsuario.ADMIN) {
-//
-//
-//            usuario.setId(id);
-//            usuario.setNome(request.getNome());
-//            usuario.setCpf(request.getCpf());
-//            usuario.setTipo(request.getTipo());
-//            usuario.setTelefone(request.getTelefone());
-//            usuario.setFuncao(request.getFuncao());
-//            usuario.setSenha(request.getSenha());
-//
-//            repository.save(usuario);
-//
-//            message = "Alteracao realizada com sucesso";
-//
-//            return message;
-//
-//        }
-//
-//        message = "Usuario não possui esse nivel de acesso";
-//        return message;
-//    }
+    private static boolean logarUsuario(ResponseList response, List<Usuario> lista, Optional<Usuario> retornoListaAdm) {
+        if (retornoListaAdm.get().getTipo() == TipoUsuario.ADMIN) {
 
+            response.setLista1(lista);
 
+            return true;
+
+        }
+        return false;
+    }
 }

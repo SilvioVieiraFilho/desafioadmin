@@ -46,13 +46,13 @@ public class UsuarioController {
 
     }
 
-//    @PutMapping(path = "/alterarusuario")
-//    public ResponseEntity alteraUsuario(@RequestParam String id, @RequestBody Usuario usuario, @RequestParam String email, @RequestParam String senha) {
-//
-//        String user = service.alterarUsuario(id, usuario, email, senha);
-//
-//        return ResponseEntity.ok().body(user);
-//
-//    }
+    @PutMapping(path = "/alterarusuario")
+    public ResponseEntity alteraUsuario(@RequestParam String id, @RequestBody Usuario usuario, @RequestParam String email, @RequestParam String senha) {
+
+        UsuarioResponse user = service.alterarUsuario(id, usuario, email, senha);
+
+        return ResponseEntity.ok().body(user);
+
+    }
 
 }
