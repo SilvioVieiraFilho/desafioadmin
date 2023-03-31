@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,30 +46,19 @@ public class UsuarioServiceTest {
         service.saveUser(usuarioDto);
         assertNotNull(request);
     }
-
 //    @DisplayName("Listar Usuario Admin")
 //    @Test
 //    public void listaUsuario() {
 //// Arrange
+//        List<Usuario> listaUsuario = MockFactory.usuarioLista();
 //
+//        Optional<Usuario> listaUsuarioAdm = Optional.of(listaUsuario.get(0));
+//        when(repository.logarUsuario(listaUsuario.get(0).getEmail() , listaUsuario.get(0).getSenha())).thenReturn(listaUsuarioAdm);
+//        when(service.listaCadastro(listaUsuarioAdm.get().getEmail(),listaUsuarioAdm.get().getSenha())).thenReturn(listaUsuario);
+//        when(repository.findAll()).thenReturn(listaUsuario);
 //
-//        Usuario user = MockFactory.usuarioLista().get(0);
+//        assertEquals("00000-0000",listaUsuario.get(0).getCpf());
 //
-//        when(service.listaCadastro(user.getEmail(), user.getSenha())).thenReturn(MockFactory.usuarioLista());
-//
-//        when(repository.findAll()).thenReturn(List.of(MockFactory.usuarioLista().get(0)));
-//
-//
-//        assertEquals(TipoUsuario.ADMIN, user);
-////        assertNotNull(response);
-////        assertEquals(user.getNome(), response.get(0).getNome());
-////        assertEquals(user.getEmail(), response.get(0).getEmail());
-////        assertEquals(user.getSenha(), response.get(0).getSenha());
-////        assertEquals(user.getCpf(), response.get(0).getTelefone());
-////        assertEquals(user.getFuncao(), response.get(0).getFuncao());
-////        assertEquals(user.getTipo(), response.get(0).getTipo());
-////        assertEquals(user.getTelefone(), response.get(0).getTelefone());
-////        assertEquals(user.getId(), response.get(0).getId());
 //
 //
 //    }

@@ -1,6 +1,9 @@
 package br.app.desafioadmin.service;
 
-import br.app.desafioadmin.domain.*;
+import br.app.desafioadmin.domain.TipoUsuario;
+import br.app.desafioadmin.domain.Usuario;
+import br.app.desafioadmin.domain.UsuarioDto;
+import br.app.desafioadmin.domain.UsuarioResponse;
 import br.app.desafioadmin.exception.UsuarioBusinessExcepetion;
 import br.app.desafioadmin.mapper.MapperUsuario;
 import br.app.desafioadmin.repositories.UsuarioRepository;
@@ -9,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -22,11 +26,11 @@ public class UsuarioServiceImp implements UsuarioService {
         Usuario usuarioEntity = MapperUsuario.toUsuario(usuarioDto);
         UsuarioResponse response = MapperUsuario.toUsuarioResponse(usuarioEntity);
 
-//        UsuarioResponse response1 = validaEmailResponse(usuarioDto, response);
-//        if (response1 != null) return response1;
+        UsuarioResponse response1 = validaEmailResponse(usuarioDto, response);
+        if (response1 != null) return response1;
 
-//        UsuarioResponse response2 = validaSenhaUsuario(usuarioDto, response);
-//        if (response2 != null) return response2;
+        UsuarioResponse response2 = validaSenhaUsuario(usuarioDto, response);
+        if (response2 != null) return response2;
 
         repository.save(usuarioEntity);
         return response;
@@ -46,22 +50,30 @@ public class UsuarioServiceImp implements UsuarioService {
         return response;
     }
 
-    public List<Usuario> listaCadastro(String email, String senha) {
-
-        ResponseList response = new ResponseList();
+    public List<Usuario> listaCadastro(String email) {
 
         List<Usuario> lista = repository.findAll();
+        List<Usuario> retornoListaAdm = repository.logarUsuario(email);
 
-        Optional<Usuario> retornoListaAdm = repository.logarUsuario(email, senha);
+        if (retornoListaAdm.equals(TipoUsuario.ADMIN)) {
+            return lista
+                    .stream()
+                    .filter(usuarioAdm -> usuarioAdm.getEmail().equals(email))
+                    .collect(Collectors.toList());
+        } else {
 
-        if (logarUsuario(response, lista, retornoListaAdm)) return response.getLista1();
-        return response.getLista1();
+            return List.of();
+        }
+
+
     }
+
     public void deletarCpf(String cpf, String email, String senha) {
 
-        Optional<Usuario> lista = repository.logarUsuario(email, senha);
-
-        loginUsuarioDel(cpf, lista);
+//        List<Usuario> lista = repository.logarUsuario(email, senha);
+//
+//        loginUsuarioDel(cpf, lista);
+//    }
     }
 
     private void loginUsuarioDel(String cpf, Optional<Usuario> lista) {
@@ -73,25 +85,15 @@ public class UsuarioServiceImp implements UsuarioService {
     }
 
     public UsuarioResponse alterarUsuario(String id, Usuario usuarioDto, String email, String senha) {
-        Optional<Usuario> lista = repository.logarUsuario(email, senha);
+//        Optional<Usuario> lista = repository.logarUsuario(email, senha);
         Usuario usuarioEntity = MapperUsuario.toUsuarioupdate(usuarioDto, id);
         UsuarioResponse response = MapperUsuario.toUsuarioResponse(usuarioEntity);
         repository.save(usuarioEntity);
-        if (lista.get().getTipo() == TipoUsuario.ADMIN) {
-            repository.save(usuarioEntity);
-            return response;
-        }
+//        if (lista.get().getTipo() == TipoUsuario.ADMIN) {
+//            repository.save(usuarioEntity);
+//            return response;
+//        }
         return null;
     }
 
-    private static boolean logarUsuario(ResponseList response, List<Usuario> lista, Optional<Usuario> retornoListaAdm) {
-        if (retornoListaAdm.get().getTipo() == TipoUsuario.ADMIN) {
-
-            response.setLista1(lista);
-
-            return true;
-
-        }
-        return false;
-    }
 }

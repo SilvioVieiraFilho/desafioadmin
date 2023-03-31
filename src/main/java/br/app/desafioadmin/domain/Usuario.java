@@ -4,6 +4,7 @@ import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
@@ -21,7 +22,7 @@ public class Usuario {
     private String cpf;
     @Column(name = "telefone")
     private String telefone;
-    @Column(name = "email")
+    @Column(name = "email",unique = true)
     private String email;
 
     @Enumerated(EnumType.STRING)

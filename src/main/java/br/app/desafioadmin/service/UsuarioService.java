@@ -11,7 +11,7 @@ public interface UsuarioService {
 
     public UsuarioResponse saveUser(UsuarioDto usuario);
 
-    public List<Usuario> listaCadastro(String email, String senha);
+    public List<Usuario> listaCadastro(String email);
 
     public void deletarCpf(String cpf,String email,String senha);
 

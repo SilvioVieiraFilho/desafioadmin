@@ -13,7 +13,6 @@ public class MockFactory {
     public static List<Usuario> usuarioLista() {
 
         List<Usuario> lista = new ArrayList<>();
-
         Usuario user = new Usuario();
         user.setNome("sad");
         user.setEmail("nino_silvio@abc.com");

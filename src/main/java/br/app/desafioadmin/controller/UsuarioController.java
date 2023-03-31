@@ -20,7 +20,7 @@ public class UsuarioController {
 
 
     @PostMapping
-    public ResponseEntity<UsuarioResponse> cadastrarUsuario(@RequestBody UsuarioDto usuario){
+    public ResponseEntity<UsuarioResponse> cadastrarUsuario(@RequestBody UsuarioDto usuario) {
 
         UsuarioResponse user = service.saveUser(usuario);
 
@@ -30,18 +30,14 @@ public class UsuarioController {
 
     @GetMapping
 
-    public ResponseEntity listarUsuario(@RequestParam String email, @RequestParam String senha) {
-
-        List<Usuario> listalogin = service.listaCadastro(email, senha);
-
-
+    public ResponseEntity<List<Usuario>> listarUsuario(@RequestParam String email){
+        List<Usuario> listalogin = service.listaCadastro(email);
         return ResponseEntity.ok().body(listalogin);
-
     }
 
     @DeleteMapping(path = "/{cpf}")
-    public ResponseEntity deletarUsuario (@PathVariable String cpf,@RequestParam String email, @RequestParam String senha ){
-         service.deletarCpf(cpf,email,senha);
+    public ResponseEntity deletarUsuario(@PathVariable String cpf, @RequestParam String email, @RequestParam String senha) {
+        service.deletarCpf(cpf, email, senha);
         return new ResponseEntity<>(cpf, HttpStatus.OK);
 
     }
