@@ -36,16 +36,16 @@ public class UsuarioController {
     }
 
     @DeleteMapping(path = "/{cpf}")
-    public ResponseEntity deletarUsuario(@PathVariable String cpf, @RequestParam String email, @RequestParam String senha) {
-        service.deletarCpf(cpf, email, senha);
+    public ResponseEntity deletarUsuario(@PathVariable String cpf, @RequestParam String email) {
+        service.deletarCpf(cpf, email);
         return new ResponseEntity<>(cpf, HttpStatus.OK);
 
     }
 
-    @PutMapping(path = "/alterarusuario")
-    public ResponseEntity alteraUsuario(@RequestParam String id, @RequestBody Usuario usuario, @RequestParam String email, @RequestParam String senha) {
+    @PutMapping(path = "/alterarusuario/{id}")
+    public ResponseEntity<UsuarioResponse> alteraUsuario(@PathVariable String id, @RequestBody UsuarioDto usuarioDto, @RequestParam String email) {
 
-        UsuarioResponse user = service.alterarUsuario(id, usuario, email, senha);
+        UsuarioResponse user = service.alterarUsuario(id, usuarioDto, email);
 
         return ResponseEntity.ok().body(user);
 

@@ -1,6 +1,5 @@
 package br.app.desafioadmin;
 
-import br.app.desafioadmin.domain.TipoUsuario;
 import br.app.desafioadmin.domain.Usuario;
 import br.app.desafioadmin.domain.UsuarioDto;
 import br.app.desafioadmin.domain.UsuarioResponse;
@@ -10,20 +9,16 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -46,42 +41,40 @@ public class UsuarioServiceTest {
         service.saveUser(usuarioDto);
         assertNotNull(request);
     }
-//    @DisplayName("Listar Usuario Admin")
-//    @Test
-//    public void listaUsuario() {
-//// Arrange
-//        List<Usuario> listaUsuario = MockFactory.usuarioLista();
-//
-//        Optional<Usuario> listaUsuarioAdm = Optional.of(listaUsuario.get(0));
-//        when(repository.logarUsuario(listaUsuario.get(0).getEmail() , listaUsuario.get(0).getSenha())).thenReturn(listaUsuarioAdm);
-//        when(service.listaCadastro(listaUsuarioAdm.get().getEmail(),listaUsuarioAdm.get().getSenha())).thenReturn(listaUsuario);
-//        when(repository.findAll()).thenReturn(listaUsuario);
-//
-//        assertEquals("00000-0000",listaUsuario.get(0).getCpf());
-//
-//
-//
-//    }
 
-    @DisplayName("Deletar Usuario")
+    @DisplayName("Listar Usuario Admin")
     @Test
-    public void deletarUser() {
-        // given
+    public void listaUsuario(){
+// Arrange
+        List<Usuario> listaUsuario = MockFactory.usuarioLista();
+        List<Usuario> linha = service.listaCadastro(listaUsuario.get(0).getEmail());
 
+        assertNotNull(linha);
+        assertEquals("nino_silvio@abc.com", listaUsuario.get(0).getEmail());
 
-        Usuario user = new Usuario();
-
-
-//        String mensagem = "DELETOU";
-
-        List<Usuario> list;
-
-
-        Mockito.when(repository.findById(user.getId())).thenReturn(Optional.of(user));
-        Mockito.doNothing().when(repository).deleteById(Mockito.any());
-        service.deletarCpf(user.getId(), user.getEmail(), user.getSenha());
-        verify(repository, Mockito.times(1)).deleteById(user.getId());
+//        List<Usuario> listaUsuarioAdm = List.of(listaUsuario.get(0));
+//        when(repository.logarUsuario(listaUsuario.get(0).getEmail())).thenReturn(listaUsuarioAdm);
+//        when(repository.findAll()).thenReturn(listaUsuario);
+//        when(service.listaCadastro(listaUsuario.get(0).getEmail())).thenReturn(listaUsuario);
+//        assertEquals("nino_silvio@abc.com", listaUsuario.get(0).getEmail());
     }
+
+//    @DisplayName("Deletar Usuario")
+//    @Test
+//    public void deletarUser() {
+//        // given
+//
+//        Usuario user = new Usuario();
+//
+////        String mensagem = "DELETOU";
+//
+//        List<Usuario> lista = MockFactory.usuarioLista();
+//
+//        when(repository.deleteCpf(lis));
+//        doNothing().when(repository).deleteById(any());
+//        service.deletarCpf(lista.get(0).getCpf(), lista.get(0).getEmail());
+//        verify(repository, times(1)).deleteById(user.getId());
+//    }
 
 
 //    @Test

@@ -5,14 +5,15 @@ import br.app.desafioadmin.domain.Usuario;
 import br.app.desafioadmin.domain.UsuarioDto;
 import br.app.desafioadmin.domain.UsuarioResponse;
 import br.app.desafioadmin.exception.UsuarioBusinessExcepetion;
+import br.app.desafioadmin.exception.handler.ExceptionHandler;
 import br.app.desafioadmin.mapper.MapperUsuario;
 import br.app.desafioadmin.repositories.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
+import net.bytebuddy.asm.Advice;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -22,25 +23,58 @@ public class UsuarioServiceImp implements UsuarioService {
 
 
     public UsuarioResponse saveUser(UsuarioDto usuarioDto) {
-
         Usuario usuarioEntity = MapperUsuario.toUsuario(usuarioDto);
         UsuarioResponse response = MapperUsuario.toUsuarioResponse(usuarioEntity);
-
         UsuarioResponse response1 = validaEmailResponse(usuarioDto, response);
-        if (response1 != null) return response1;
 
-        UsuarioResponse response2 = validaSenhaUsuario(usuarioDto, response);
-        if (response2 != null) return response2;
+        if (response.getCpf() == "" || response.getCpf() == null) {
+
+            throw new UsuarioBusinessExcepetion();
+
+        }
+        if (response.getEmail() == "" || response.getEmail() == null) {
+
+            throw new UsuarioBusinessExcepetion();
+        }
 
         repository.save(usuarioEntity);
         return response;
     }
 
-    private static UsuarioResponse validaSenhaUsuario(UsuarioDto usuarioDto, UsuarioResponse response) {
-        if (usuarioDto.getSenha() == "" || usuarioDto.getSenha() == null) {
+    public List<Usuario> listaCadastro(String email) {
+        List<Usuario> lista = repository.findAll();
+        List<Usuario> retornoListaAdm = repository.logarUsuario(email);
+        for (Usuario l : retornoListaAdm) {
+            if (l.getTipo().equals(TipoUsuario.ADMIN)) {
+                return lista;
+            }
+        }
+        return List.of();
+    }
+
+    public void deletarCpf(String cpf, String email) {
+        List<Usuario> lista = repository.logarUsuario(email);
+        loginUsuarioDel(cpf, lista);
+        if(cpf == "" || cpf == null){
             throw new UsuarioBusinessExcepetion();
         }
+    }
+
+    public UsuarioResponse alterarUsuario(String id, UsuarioDto usuarioDto, String email) {
+//        List<Usuario> lista = repository.logarUsuario(email);
+        Usuario usuarioEntity = MapperUsuario.toUsuarioupdate(usuarioDto, id);
+        UsuarioResponse response = MapperUsuario.toUsuarioResponse(usuarioEntity);
+        repository.save(usuarioEntity);
+
         return response;
+    }
+
+    private void loginUsuarioDel(String cpf, List<Usuario> lista) {
+        if (lista.get(0).getTipo() == TipoUsuario.ADMIN) {
+            repository.deleteCpf(cpf);
+        } else {
+            throw new UsuarioBusinessExcepetion();
+        }
     }
 
     private static UsuarioResponse validaEmailResponse(UsuarioDto usuarioDto, UsuarioResponse response) {
@@ -50,50 +84,5 @@ public class UsuarioServiceImp implements UsuarioService {
         return response;
     }
 
-    public List<Usuario> listaCadastro(String email) {
-
-        List<Usuario> lista = repository.findAll();
-        List<Usuario> retornoListaAdm = repository.logarUsuario(email);
-
-        if (retornoListaAdm.equals(TipoUsuario.ADMIN)) {
-            return lista
-                    .stream()
-                    .filter(usuarioAdm -> usuarioAdm.getEmail().equals(email))
-                    .collect(Collectors.toList());
-        } else {
-
-            return List.of();
-        }
-
-
-    }
-
-    public void deletarCpf(String cpf, String email, String senha) {
-
-//        List<Usuario> lista = repository.logarUsuario(email, senha);
-//
-//        loginUsuarioDel(cpf, lista);
-//    }
-    }
-
-    private void loginUsuarioDel(String cpf, Optional<Usuario> lista) {
-        if (lista.get().getTipo() == TipoUsuario.ADMIN) {
-            repository.deleteCpf(cpf);
-        } else {
-            throw new UsuarioBusinessExcepetion();
-        }
-    }
-
-    public UsuarioResponse alterarUsuario(String id, Usuario usuarioDto, String email, String senha) {
-//        Optional<Usuario> lista = repository.logarUsuario(email, senha);
-        Usuario usuarioEntity = MapperUsuario.toUsuarioupdate(usuarioDto, id);
-        UsuarioResponse response = MapperUsuario.toUsuarioResponse(usuarioEntity);
-        repository.save(usuarioEntity);
-//        if (lista.get().getTipo() == TipoUsuario.ADMIN) {
-//            repository.save(usuarioEntity);
-//            return response;
-//        }
-        return null;
-    }
 
 }

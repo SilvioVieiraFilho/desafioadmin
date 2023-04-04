@@ -40,15 +40,15 @@ public class MapperUsuario {
         return lista;
     }
 
-    public static Usuario toUsuarioupdate(Usuario request, String id) {
+    public static Usuario toUsuarioupdate(UsuarioDto usuarioDto, String id) {
         Usuario user = new Usuario();
-        user.setCpf(request.getCpf());
-        user.setNome(request.getNome());
-        user.setTelefone(request.getTelefone());
-        user.setEmail(request.getEmail());
-        user.setTipo(request.getTipo());
-        user.setFuncao(request.getFuncao());
-        user.setSenha(request.getSenha());
+        user.setCpf(usuarioDto.getCpf());
+        user.setNome(usuarioDto.getNome());
+        user.setTelefone(usuarioDto.getTelefone());
+        user.setEmail(usuarioDto.getEmail());
+        user.setTipo(usuarioDto.getTipo());
+        user.setFuncao(usuarioDto.getFuncao());
+        user.setSenha(usuarioDto.getSenha());
         user.setId(id);
         return user;
     }
